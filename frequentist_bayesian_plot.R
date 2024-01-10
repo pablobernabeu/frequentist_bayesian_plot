@@ -137,40 +137,7 @@ frequentist_bayesian_plot =
             legend.background = element_rect(colour = 'grey70', fill = 'white'),
             panel.grid.major.y = element_line(colour = 'grey90'),
             plot.margin = margin(9, 4, 14, 12))
-    
-    # Manual legend for frequentist analysis (red) and Bayesian analysis (blue),
-    # subject to the presence of 'note_frequentist_no_prior'.
-    
-    if(note_frequentist_no_prior) {
-      
-      plot$data = plot$data %>%
-        mutate(method = rep(c('Frequentist analysis\n(no prior)', 
-                              'Bayesian analysis'), 
-                            times = n()/2))
-      
-      plot = plot +
-        geom_line(aes(fill = factor(method)), alpha = 0) +  # <-- placeholder to allow manual scale
-        scale_fill_manual(values = c('Frequentist analysis\n(no prior)' = 'red', 
-                                     'Bayesian analysis' = '#005b96'),  # <-- blue
-                          guide = guide_legend(title = NULL, 
-                                               override.aes = list(size = 5), 
-                                               ncol = legend_ncol)) 
-      
-    } else {
-      
-      plot$data = plot$data %>%
-        mutate(method = rep(c('Frequentist analysis', 'Bayesian analysis'), 
-                            times = n()/2))
-      
-      plot = plot +
-        geom_line(aes(fill = factor(method)), alpha = 0) +  # <-- placeholder to allow manual scale
-        scale_fill_manual(values = c('Frequentist analysis' = 'red', 
-                                     'Bayesian analysis' = '#005b96'),  # <-- blue
-                          guide = guide_legend(title = NULL, 
-                                               override.aes = list(size = 4), 
-                                               ncol = legend_ncol)) 
-    }
-    
+        
     # If labels supplied, pass them to 'scale_y_discrete'. This is necessary 
     # because modifying the 'parameter' column directly creates errors in 
     # the plot.
@@ -183,6 +150,39 @@ frequentist_bayesian_plot =
         scale_y_discrete(labels = rev(labels), limits = rev, 
                          # Padding at the borders
                          expand = c(0.023, 0.033))
+    }
+    
+    # Manual legend for frequentist analysis (red) and Bayesian analysis (blue),
+    # subject to the presence of 'note_frequentist_no_prior'.
+    
+    if(note_frequentist_no_prior) {
+      
+      plot$data = plot$data %>%
+        mutate(method = rep(c('Frequentist analysis\n(no prior)', 
+                              'Bayesian analysis'), 
+                            times = n()/2))
+      
+      plot = plot +
+        geom_line(aes(colour = factor(method)), alpha = 0) +  # <-- placeholder to allow manual scale
+        scale_colour_manual(values = c('Frequentist analysis\n(no prior)' = 'red', 
+                                       'Bayesian analysis' = '#005b96'),  # <-- blue
+                            guide = guide_legend(title = NULL, 
+                                                 override.aes = list(alpha = 1, linewidth = 5), 
+                                                 ncol = legend_ncol))
+      
+    } else {
+      
+      plot$data = plot$data %>%
+        mutate(method = rep(c('Frequentist analysis', 'Bayesian analysis'), 
+                            times = n()/2))
+      
+      plot = plot +
+        geom_line(aes(colour = factor(method)), alpha = 0) +  # <-- placeholder to allow manual scale
+        scale_colour_manual(values = c('Frequentist analysis' = 'red', 
+                                       'Bayesian analysis' = '#005b96'),  # <-- blue
+                            guide = guide_legend(title = NULL, 
+                                                 override.aes = list(alpha = 1, linewidth = 4), 
+                                                 ncol = legend_ncol))
     }
     
     # Output
